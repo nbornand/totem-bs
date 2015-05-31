@@ -1,0 +1,8 @@
+<div class="panel panel-default">
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead><tr><th ng-repeat="property in schema">{{property.label||property.name}}</th></tr></thead>
+            <tbody><tr><td ng-repeat="property in schema">{{state[property.name]}}</td></tr></tbody>
+        </table>
+    </div>
+</div>

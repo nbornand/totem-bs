@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="col-sm-2">
+        <select class="form-control" ng-model="status" ng-change="statusChanged(day)"
+            ng-options="item.val as item.full for item in workStatus">
+        </select>
+    </div>
+    <div ng-if="day.status === 'work'">
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="day.salon1_option" ng-change="validateHours(day)"
+                    ng-options="salon.id as salon.name for salon in salons" ng-init="validateHours(day)">
+            </select>
+        </div>
+        <div ng-if="salonDefined(day.salon1_option)">
+            <div class="col-sm-1 has-success" ng-class="{'has-error':invalid['start1'] !== true}">
+                <input class="form-control" ng-model="day.start1" ng-change="validateHours(day)"></div>
+            <div class="col-sm-1 has-success" ng-class="{'has-error':invalid['end1'] !== true}">
+                <input class="form-control" ng-model="day.end1" ng-change="validateHours(day)"></div>
+            <div class="col-sm-2">
+                <select class="form-control" ng-model="day.salon2_option" ng-change="validateHours(day)"
+                        ng-options="salon.id as salon.name for salon in salonsPlusEmpty" ng-init="validateHours(day)">
+                </select>
+            </div>
+            <div class="col-sm-1 has-success" ng-if="salonDefined(day.salon2_option)" ng-class="{'has-error':invalid['start2'] !== true}">
+                <input class="form-control" ng-model="day.start2" ng-change="validateHours(day)"></div>
+            <div class="col-sm-1 has-success" ng-if="salonDefined(day.salon2_option)" ng-class="{'has-error':invalid['end2'] !== true}">
+                <input class="form-control" ng-model="day.end2" ng-change="validateHours(day)"></div>
+        </div>
+        <div><label class="control-label">=&gt {{day.duration}}h</label></div>
+    </div>
+    <div ng-if="modified && allCorrects">
+        <button type="button" class="btn btn-success" ng-click="savePattern(day)"><span class="glyphicon glyphicon-save"></span> Sauver</button>
+    </div>
+    <div ng-if="!allCorrects" class="alert alert-danger col-sm-12" role="alert"
+            style="margin:8px;">
+        <strong>Saisie incorrecte</strong> {{errorMessage}}</div>
+</div>

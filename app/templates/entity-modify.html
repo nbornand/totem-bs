@@ -1,0 +1,32 @@
+<form class="form-horizontal" role="form">
+    <label class="col-sm-offset-10 control-label">Champs obligatoires (*)</span></label>
+    <div class="form-group has-success has-feedback" ng-repeat="property in schema"
+         ng-if="property.type !== 'list' && defaultValues[property.name] === undefined && !property.inferred"
+    ng-class="{'has-error':isInvalid[property.name] === true}">
+        <label class="col-sm-2 control-label">{{property.label||property.name}}<span ng-if="property.mandatory || property.type === 'enum'"> (*)</span></label>
+        <div class="col-sm-10" ng-if="property.type !== 'enum'">
+            <div ng-if="!isLocalTable(property)">
+                <input class="form-control" ng-model="state[property.name]" ng-change="reValidate()" placeholder="{{property.label||property.name}}">
+            </div>
+            <div ng-if="isLocalTable(property)">
+                <select class="form-control" ng-model="state[property.name]" ng-change="reValidate()">
+                    <option ng-repeat="row in tableFor(property)" value="{{row.id}}">{{row.name || row.first}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-10" ng-if="property.type === 'enum'">
+            <select class="form-control" ng-model="state[property.name]" ng-change="reValidate()">
+                <option ng-repeat="pos in property.values" value="{{pos}}">{{property.labels[$index]||pos}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <button ng-if="displayCancel" type="button" class="btn btn-warning col-sm-offset-2 col-sm-2" ng-click="cancelModify()"><span class="glyphicon glyphicon-arrow-left"></span> Annuler</button>
+        <span ng-if="!displayCancel" class="col-sm-4"></span>
+        <button ng-if="(state.id === undefined) && allValid" type="button" class="btn btn-success col-sm-offset-6 col-sm-2" ng-click="saveEntity(state)">
+            <span class="glyphicon glyphicon-floppy-disk"></span> Créer un nouveau
+        </button>
+        <button ng-if="(state.id !== undefined) && allValid" type="button" class="btn btn-success col-sm-offset-6 col-sm-2" ng-click="saveEntity(state)"><span class="glyphicon glyphicon-floppy-disk"></span> Sauver les changement</button>
+        <button ng-if="!allValid" type="button" class="btn btn-danger col-sm-offset-6 col-sm-2"><span class="glyphicon glyphicon-warning-sign"></span> Formulaire invalide</button>
+    </div>
+</form>
